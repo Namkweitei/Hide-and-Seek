@@ -13,7 +13,8 @@ public class Cat : MonoBehaviour
 {
     private MotionHandle lightHandle;
     public Exam exam;
-    [SerializeField] public Animator anim;
+    [SerializeField] Animator anim;
+    [SerializeField] private string animName = "idle";
     [SerializeField] private FieldOfView fieldOfViewLeft;
     [SerializeField] private FieldOfView fieldOfViewRight;
     [SerializeField] private float viewDistance;
@@ -51,14 +52,15 @@ public class Cat : MonoBehaviour
         if (timeCatch <= 0)
         {
             Debug.Log("Catch");
-            timeCatch = UnityEngine.Random.Range(6f, 8f);
-            transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
-            {
-                Debug.Log("Play Catch Anim");
-                catMask.sortingOrder = 1;
-                PlayLight();
-                StartCoroutine(EndCatch());
-            });
+            timeCatch = UnityEngine.Random.Range(4f, 6f);
+
+            //transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
+            //{
+            //    Debug.Log("Play Catch Anim");
+            //    catMask.sortingOrder = 1;
+            //    PlayLight();
+            //    StartCoroutine(EndCatch());
+            //});
         }
     }
     IEnumerator EndCatch()
@@ -96,7 +98,7 @@ public class Cat : MonoBehaviour
 
     private void PlayAnim(AnimType animType, Action actionCallBack = null)
     {
-        anim.Play(animType.ToString());
+        ChangeAnim(animType.ToString().ToLowerInvariant());
         //if (AnimTimeGlobalConfig.Instance == null || exam == null)
         //{
         //    Debug.LogWarning("Missing anim config or exam data");
@@ -122,6 +124,16 @@ public class Cat : MonoBehaviour
             
         }).RunWithoutBinding().AddTo(this);
         Debug.Log("PlayLight");
+    }
+    public void ChangeAnim(string animName)
+    {
+        if (this.animName != animName)
+        {
+            anim.ResetTrigger(this.animName);
+            this.animName = animName;
+            anim.SetTrigger(this.animName);
+
+        }
     }
 }
 
