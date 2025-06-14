@@ -35,14 +35,6 @@ public class Player : MonoBehaviour
             ChangeAnim("run");
         }
 
-        if (Input.GetMouseButtonDown(0))
-            Debug.Log("Mouse Button Down");
-
-        if (Input.GetMouseButton(0))
-            Debug.Log("Mouse Button Held");
-
-        if (Input.GetMouseButtonUp(0))
-            Debug.Log("Mouse Button Up");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -23,6 +23,7 @@ public class Cat : MonoBehaviour
     [SerializeField] private SpriteRenderer catMask;
     [SerializeField] float timeCatch;
     public int playerLayer;
+    public bool isStart;
     private void Start()
     {
         fieldOfViewLeft.SetOnHitObject(OnFieldOfViewHit);
@@ -45,13 +46,15 @@ public class Cat : MonoBehaviour
     }
     private void Update()
     {
-        if (!GameController.Instance.IsPlay) return;
+        if (!isStart) return;
         timeCatch -= Time.deltaTime;
         if (timeCatch <= 0)
         {
-            timeCatch = UnityEngine.Random.Range(3f, 4f);
+            Debug.Log("Catch");
+            timeCatch = UnityEngine.Random.Range(6f, 8f);
             transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
             {
+                Debug.Log("Play Catch Anim");
                 catMask.sortingOrder = 1;
                 PlayLight();
                 StartCoroutine(EndCatch());
@@ -60,7 +63,8 @@ public class Cat : MonoBehaviour
     }
     IEnumerator EndCatch()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        Debug.Log("Reset");
         Reset();
         catMask.sortingOrder = -1;
         transform.DOMoveY(-1.5f, 1f).SetEase(DG.Tweening.Ease.InBack);
@@ -93,11 +97,31 @@ public class Cat : MonoBehaviour
     private void PlayAnim(AnimType animType, Action actionCallBack = null)
     {
         anim.Play(animType.ToString());
-        var animTime = AnimTimeGlobalConfig.Instance.GetAnimTime(animType, exam);
-        LMotion.Create(0, 1, animTime).WithOnComplete(() =>
+        //if (AnimTimeGlobalConfig.Instance == null || exam == null)
+        //{
+        //    Debug.LogWarning("Missing anim config or exam data");
+        //    return;
+        //}
+
+        //float animTime;
+        //try
+        //{
+        //    animTime = AnimTimeGlobalConfig.Instance.GetAnimTime(animType, exam);
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.LogError("Failed to get anim time: " + e.Message);
+        //    return;
+        //}
+        //var animTime = AnimTimeGlobalConfig.Instance.GetAnimTime(animType, exam);
+        LMotion.Create(0, 1, 1).WithOnComplete(() =>
         {
-            actionCallBack?.Invoke();
+           
+                actionCallBack?.Invoke();
+            
+            
         }).RunWithoutBinding().AddTo(this);
+        Debug.Log("PlayLight");
     }
 }
 

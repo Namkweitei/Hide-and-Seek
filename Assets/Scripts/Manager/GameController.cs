@@ -19,11 +19,13 @@ namespace Manager
 
         private void Start()
         {
+            Application.targetFrameRate = 60;
             buttonStart.onClick.AddListener(StartGame);
             buttonReload.onClick.AddListener(() =>
             {
                SceneManager.LoadScene(0);
             });
+
         }
         private void Update()
         {
@@ -35,6 +37,7 @@ namespace Manager
             buttonStart.gameObject.SetActive(false);
             isPlay = true;
             player.IsStart = true;
+            cat.isStart = true;
         }
 
         public void LooseGame()
@@ -49,6 +52,7 @@ namespace Manager
             buttonReload.gameObject.SetActive(true);
             player.ChangeAnim("idle");
             player.IsStart = false;
+            cat.isStart = false;
         }
     }
 }
