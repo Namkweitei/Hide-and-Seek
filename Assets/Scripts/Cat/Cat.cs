@@ -25,6 +25,7 @@ public class Cat : MonoBehaviour
     [SerializeField] float timeCatch;
     public int playerLayer;
     public bool isStart;
+    public bool isStop;
     private void Start()
     {
         fieldOfViewLeft.SetOnHitObject(OnFieldOfViewHit);
@@ -49,11 +50,11 @@ public class Cat : MonoBehaviour
     {
         if (!isStart) return;
         timeCatch -= Time.deltaTime;
-        if (timeCatch <= 0)
+        if (timeCatch <= 0 && !isStop)
         {
-            Debug.Log("Catch");
-            timeCatch = UnityEngine.Random.Range(4f, 6f);
-
+            isStop = true;
+            ChangeAnim(AnimType.Catch.ToString().ToLowerInvariant());
+            
             //transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
             //{
             //    Debug.Log("Play Catch Anim");
@@ -95,27 +96,16 @@ public class Cat : MonoBehaviour
         fieldOfViewLeft.viewDistance = 0;
         fieldOfViewRight.viewDistance = 0;
     }
+    public void ReSetAnim()
+    {
+        isStop = false;
+        ChangeAnim(AnimType.Idle.ToString().ToLowerInvariant());
+        timeCatch = UnityEngine.Random.Range(4f, 6f);
 
+    }
     private void PlayAnim(AnimType animType, Action actionCallBack = null)
     {
-        ChangeAnim(animType.ToString().ToLowerInvariant());
-        //if (AnimTimeGlobalConfig.Instance == null || exam == null)
-        //{
-        //    Debug.LogWarning("Missing anim config or exam data");
-        //    return;
-        //}
-
-        //float animTime;
-        //try
-        //{
-        //    animTime = AnimTimeGlobalConfig.Instance.GetAnimTime(animType, exam);
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.LogError("Failed to get anim time: " + e.Message);
-        //    return;
-        //}
-        //var animTime = AnimTimeGlobalConfig.Instance.GetAnimTime(animType, exam);
+        //ChangeAnim(animType.ToString().ToLowerInvariant());
         LMotion.Create(0, 1, 1).WithOnComplete(() =>
         {
            
