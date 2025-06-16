@@ -42,6 +42,10 @@ namespace Manager
 
         public void LooseGame()
         {
+            isPlay = false;
+            cat.Reset();
+            cat.ChangeAnim("surprise");
+            player.ChangeAnim("idle");
             Debug.Log("Game Over! You lost.");
         }
 
