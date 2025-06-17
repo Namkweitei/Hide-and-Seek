@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3214424489339901099}
   - component: {fileID: 5627641675963628625}
   - component: {fileID: 5053704410690197817}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: CayNam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

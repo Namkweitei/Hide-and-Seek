@@ -6,6 +6,8 @@ using UnityEngine;
 public class Level : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField] Transform startPoint;
+    [SerializeField] Transform endPoint;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,9 @@ public class Level : MonoBehaviour
         //{
         //    gameObject.SetActive(false);
         //}
+        float distanceStartToEnd = Vector3.Distance(startPoint.position, endPoint.position);
+        float distance = Vector3.Distance(GameController.Instance.Player.transform.position, endPoint.position);
+        CanvasController.Instance.SetSlider(1 - distance / distanceStartToEnd);
     }
 
 }

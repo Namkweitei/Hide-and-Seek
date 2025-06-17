@@ -38,6 +38,7 @@ public class Cat : MonoBehaviour
         if (colliderHit.gameObject.layer == playerLayer)
         {
             onCatch = true;
+            Reset();
             GameController.Instance.LooseGame();
         }
         else
@@ -82,6 +83,8 @@ public class Cat : MonoBehaviour
     {
         if (lightHandle.IsPlaying())
             lightHandle.TryCancel();
+        fieldOfViewLeft.gameObject.SetActive(true);
+        fieldOfViewRight.gameObject.SetActive(true);
         lightHandle = LMotion.Create(0f, viewDistance, duration).Bind(x =>
         {
             fieldOfViewLeft.viewDistance = x;
@@ -95,6 +98,8 @@ public class Cat : MonoBehaviour
         onCatch = false;
         fieldOfViewLeft.viewDistance = 0;
         fieldOfViewRight.viewDistance = 0;
+        fieldOfViewLeft.gameObject.SetActive(false);
+        fieldOfViewRight.gameObject.SetActive(false);
     }
     public void ReSetAnim()
     {

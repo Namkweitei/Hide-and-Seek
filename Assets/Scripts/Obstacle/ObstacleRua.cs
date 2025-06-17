@@ -24,7 +24,7 @@ public class ObstacleRua : MonoBehaviour, IObstacle
     {
         if (!isActive) return;
         Vector2 vectorTrs = transform.localPosition;
-        transform.localPosition = vectorTrs + Vector2.left * (speed * Time.deltaTime);
+        transform.localPosition = vectorTrs + Vector2.right * (speed * Time.deltaTime);
     }
 
     public void RestObstacle()

@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isStart) return;
+        if (!isStart || GameController.Instance.IsLoose) return;
         if (Input.GetMouseButtonDown(0) && !isHoldingMouse)
         {
             isHoldingMouse = true;
@@ -37,19 +37,25 @@ public class Player : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Home"))
-        {
-            GameController.Instance.WinGame();
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Home"))
+    //    {
+    //        GameController.Instance.WinGame();
+    //    }
+    //}
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Home"))
         {
             GameController.Instance.WinGame();
-            ChangeAnim("idle");
+            //ChangeAnim("idle");
+        }
+        if(collision.gameObject.CompareTag("Coin"))
+        {
+            CanvasController.Instance.UpCoin();
+            Destroy(collision.gameObject);
+            //ChangeAnim("catch");
         }
     }
     public void ChangeAnim(string animName)

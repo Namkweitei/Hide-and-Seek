@@ -26,7 +26,7 @@ public class FieldOfView : MonoBehaviour {
     public Vector3 origin;
     public float startingAngle;
     private Action<Collider2D> onHitObject;
-    
+    [SerializeField] float innerOffset = 0.3f;
     public void SetOnHitObject(Action<Collider2D> onHitObjectChange) {
         this.onHitObject = onHitObjectChange;
     }
@@ -40,51 +40,66 @@ public class FieldOfView : MonoBehaviour {
         origin = Vector3.zero;
     }
     [Button]
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
         int rayCount = 50;
         float angle = startingAngle;
         float angleIncrease = fov / rayCount;
 
-        Vector3[] vertices = new Vector3[rayCount + 1 + 1];
+       // Khoảng cách từ origin đến đường đáy phía trước
+
+        Vector3[] vertices = new Vector3[(rayCount + 1) * 2]; // Mỗi ray có 2 đỉnh: gần và xa
         Vector2[] uv = new Vector2[vertices.Length];
-        int[] triangles = new int[rayCount * 3];
+        int[] triangles = new int[rayCount * 6]; // Mỗi ô vuông cần 2 tam giác = 6 điểm
 
-        vertices[0] = origin;
+        Vector3 centerDir = UtilsClass.GetVectorFromAngle(startingAngle - fov / 2f + fov / 2f); // hướng chính giữa
+        Vector3 baseCenter = origin + centerDir * innerOffset;
 
-        int vertexIndex = 1;
-        int triangleIndex = 0;
-        for (int i = 0; i <= rayCount; i++) {
-            Vector3 vertex;
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, UtilsClass.GetVectorFromAngle(angle), viewDistance, layerMask);
-            if (raycastHit2D.collider == null) {
-                // No hit
-                vertex = origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
-               
-                
-            } else {
-                // Hit object
-                vertex = raycastHit2D.point; 
-                onHitObject?.Invoke(raycastHit2D.collider);
+        for (int i = 0; i <= rayCount; i++)
+        {
+            float currentAngle = angle - i * angleIncrease;
+            Vector3 dir = UtilsClass.GetVectorFromAngle(currentAngle);
+
+            // Điểm gần (trên đoạn đáy trước)
+            Vector3 nearPoint = baseCenter + dir * (innerOffset);
+            // Điểm xa (từ điểm gần raycast ra)
+            Vector3 farPoint;
+            RaycastHit2D raycastHit = Physics2D.Raycast(nearPoint, dir, viewDistance, layerMask);
+            if (raycastHit.collider == null)
+            {
+                farPoint = nearPoint + dir * viewDistance;
             }
-            vertices[vertexIndex] = vertex;
-
-            if (i > 0) {
-                triangles[triangleIndex + 0] = 0;
-                triangles[triangleIndex + 1] = vertexIndex - 1;
-                triangles[triangleIndex + 2] = vertexIndex;
-
-                triangleIndex += 3;
+            else
+            {
+                farPoint = raycastHit.point;
+                onHitObject?.Invoke(raycastHit.collider);
             }
 
-            vertexIndex++;
-            angle -= angleIncrease;
+            vertices[i * 2] = nearPoint;
+            vertices[i * 2 + 1] = farPoint;
         }
 
+        int triangleIndex = 0;
+        for (int i = 0; i < rayCount; i++)
+        {
+            int index = i * 2;
 
+            // Tam giác 1
+            triangles[triangleIndex++] = index;
+            triangles[triangleIndex++] = index + 1;
+            triangles[triangleIndex++] = index + 3;
+
+            // Tam giác 2
+            triangles[triangleIndex++] = index;
+            triangles[triangleIndex++] = index + 3;
+            triangles[triangleIndex++] = index + 2;
+        }
+
+        mesh.Clear();
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
-        mesh.bounds = new Bounds(origin, Vector3.one * 1000f);
+        mesh.RecalculateBounds();
     }
 
     public void SetOrigin(Vector3 origin) {
