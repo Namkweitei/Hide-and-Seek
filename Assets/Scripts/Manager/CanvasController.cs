@@ -37,14 +37,14 @@ public class CanvasController : Singleton<CanvasController>
             buttonStart.gameObject.SetActive(false);
             panelGame.SetActive(true);
         });
-        buttonReload.onClick.AddListener(() =>
-        {
-            SceneManager.LoadScene(0);
-        });
-        buttonNext.onClick.AddListener(() =>
-        {
-            SceneManager.LoadScene(0);
-        });
+        //buttonReload.onClick.AddListener(() =>
+        //{
+        //    SceneManager.LoadScene(0);
+        //});
+        //buttonNext.onClick.AddListener(() =>
+        //{
+        //    SceneManager.LoadScene(0);
+        //});
         textScore.text = Coin.ToString();
     }
 
