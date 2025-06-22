@@ -49,21 +49,21 @@ public class Cat : MonoBehaviour
     }
     private void Update()
     {
-        if (!isStart) return;
-        timeCatch -= Time.deltaTime;
-        if (timeCatch <= 0 && !isStop)
-        {
-            isStop = true;
-            ChangeAnim(AnimType.Catch.ToString().ToLowerInvariant());
+        //if (!isStart) return;
+        //timeCatch -= Time.deltaTime;
+        //if (timeCatch <= 0 && !isStop)
+        //{
+        //    isStop = true;
+        //    ChangeAnim(AnimType.Catch.ToString().ToLowerInvariant());
             
-            //transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
-            //{
-            //    Debug.Log("Play Catch Anim");
-            //    catMask.sortingOrder = 1;
-            //    PlayLight();
-            //    StartCoroutine(EndCatch());
-            //});
-        }
+        //    //transform.DOMoveY(1.5f, 1f).SetEase(DG.Tweening.Ease.InBack).OnComplete(() =>
+        //    //{
+        //    //    Debug.Log("Play Catch Anim");
+        //    //    catMask.sortingOrder = 1;
+        //    //    PlayLight();
+        //    //    StartCoroutine(EndCatch());
+        //    //});
+        //}
     }
     IEnumerator EndCatch()
     {
@@ -104,7 +104,7 @@ public class Cat : MonoBehaviour
     public void ReSetAnim()
     {
         isStop = false;
-        ChangeAnim(AnimType.Idle.ToString().ToLowerInvariant());
+        ChangeAnim("idle");
         timeCatch = UnityEngine.Random.Range(4f, 6f);
 
     }

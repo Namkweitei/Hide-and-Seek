@@ -57,6 +57,10 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
             //ChangeAnim("catch");
         }
+        if (collision.gameObject.CompareTag("Trap"))
+        {
+            collision.gameObject.GetComponent<SlowSpeed>().SetSlowSpeed();
+        }
     }
     public void ChangeAnim(string animName)
     {

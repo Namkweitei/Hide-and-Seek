@@ -9,6 +9,8 @@ public class ObstacleRua : MonoBehaviour, IObstacle
     public float speed = 1f;
     [SerializeField] private bool isActive = false;
 
+    public bool IsActive { get => isActive; set => isActive = value; }
+
     [Button]
     public void Activate()
     {
@@ -34,7 +36,14 @@ public class ObstacleRua : MonoBehaviour, IObstacle
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        isActive = true;
+        if(collision.gameObject.layer == 3)
+        {
+            isActive = true;
+        }
+        if (collision.gameObject.layer == 0)
+        {
+            isActive = false;
+        }
     }
 }
 

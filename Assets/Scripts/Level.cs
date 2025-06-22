@@ -8,6 +8,9 @@ public class Level : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] Transform startPoint;
     [SerializeField] Transform endPoint;
+
+    public float Speed { get => speed; set => speed = value; }
+
     // Start is called before the first frame update
     void Start()
     {

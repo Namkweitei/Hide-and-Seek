@@ -12,10 +12,12 @@ public class CanvasController : Singleton<CanvasController>
     [SerializeField] Button buttonReload;
     [SerializeField] Button buttonNext;
     [SerializeField] Slider sliderProgress;
+    [SerializeField] Slider sliderLoading;
     [SerializeField] CanvasGroup panelLoading;
     [SerializeField] GameObject panelGame;
     [SerializeField] GameObject panelWin;
     [SerializeField] GameObject panelLoose;
+    [SerializeField] GameObject panelNext;
     [SerializeField] TextMeshProUGUI textScore;
 
     public int Coin 
@@ -27,20 +29,37 @@ public class CanvasController : Singleton<CanvasController>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        panelLoading.DOFade(0, 1f).SetDelay(1.5f).OnComplete(() =>
+        if (sliderLoading != null) 
         {
-            panelLoading.gameObject.SetActive(false);
-        });
+            sliderLoading.DOValue(1, 2f).SetEase(Ease.InOutCubic).OnComplete(() =>
+            {
+                panelLoading.DOFade(0, 1f).SetDelay(1.5f).OnComplete(() =>
+                {
+                    panelLoading.gameObject.SetActive(false);
+                });
+            });
+        }
+        else
+        {
+            panelLoading.DOFade(0, 1f).SetDelay(1.5f).OnComplete(() =>
+            {
+                panelLoading.gameObject.SetActive(false);
+            });
+        }
+       
+       
         buttonStart.onClick.AddListener(() =>
         {
             GameController.Instance.StartGame();
-            buttonStart.gameObject.SetActive(false);
             panelGame.SetActive(true);
+            buttonStart.gameObject.SetActive(false);
         });
-        //buttonReload.onClick.AddListener(() =>
-        //{
-        //    SceneManager.LoadScene(0);
-        //});
+        buttonReload.onClick.AddListener(() =>
+        {
+            GameController.Instance.InitStart();
+            buttonStart.gameObject.SetActive(true);
+            panelNext.SetActive(false);
+        });
         //buttonNext.onClick.AddListener(() =>
         //{
         //    SceneManager.LoadScene(0);
@@ -66,7 +85,7 @@ public class CanvasController : Singleton<CanvasController>
     }
     public void WinGame()
     {
-       StartCoroutine(WinCatch());
+        StartCoroutine(WinCatch());
     }
     public void LooseGame()
     {
@@ -80,7 +99,8 @@ public class CanvasController : Singleton<CanvasController>
         yield return new WaitForSeconds(1f);
         panelLoose.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
         {
-            SceneManager.LoadScene(0);
+            GameController.Instance.InitStart();
+            buttonStart.gameObject.SetActive(true);
         });
         
     }
@@ -90,9 +110,22 @@ public class CanvasController : Singleton<CanvasController>
         panelGame.SetActive(false);
         panelWin.SetActive(true);
         yield return new WaitForSeconds(2f);
-        panelWin.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
+        if(panelNext != null)
         {
-            SceneManager.LoadScene(0);
-        });
+            panelWin.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
+            {
+                panelNext.SetActive(true);
+                
+            });
+        }
+        else
+        {
+            panelWin.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
+            {
+                GameController.Instance.InitStart();
+                buttonStart.gameObject.SetActive(true);
+            });
+        }
+        
     }
 }
