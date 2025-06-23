@@ -54,12 +54,16 @@ public class CanvasController : Singleton<CanvasController>
             panelGame.SetActive(true);
             buttonStart.gameObject.SetActive(false);
         });
-        buttonReload.onClick.AddListener(() =>
+        if(buttonReload != null)
         {
-            GameController.Instance.InitStart();
-            buttonStart.gameObject.SetActive(true);
-            panelNext.SetActive(false);
-        });
+            buttonReload.onClick.AddListener(() =>
+            {
+                GameController.Instance.InitStart();
+                buttonStart.gameObject.SetActive(true);
+                panelNext.SetActive(false);
+            });
+        }
+            
         //buttonNext.onClick.AddListener(() =>
         //{
         //    SceneManager.LoadScene(0);
@@ -101,6 +105,7 @@ public class CanvasController : Singleton<CanvasController>
         {
             GameController.Instance.InitStart();
             buttonStart.gameObject.SetActive(true);
+            panelLoose.SetActive(false);
         });
         
     }
@@ -124,6 +129,7 @@ public class CanvasController : Singleton<CanvasController>
             {
                 GameController.Instance.InitStart();
                 buttonStart.gameObject.SetActive(true);
+                panelWin.SetActive(false);
             });
         }
         
