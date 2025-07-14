@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Shark.unity
     guid: 0447d5eb8b08ba048bc11d15bd670156
   - enabled: 0
     path: Assets/Scenes/Cat.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Ailent.unity
     guid: a92b1ce087db0bf4cb505c81133c8dea
   m_configObjects: {}
