@@ -7,11 +7,18 @@ public class SlowSpeed : MonoBehaviour
     float timer;
     public bool isSlow;
     public float speedSlow = 1.65f;
+    public float speedNormal = 3f;
+    public bool isBongBong;
+    public bool isHide = false;
     private void Update()
     {
         if (isInSlow)
         {
             timer += Time.deltaTime;
+            if (isBongBong)
+            {
+                transform.position = GameController.Instance.Player.transform.position;
+            }
             if (timer > 5) 
             {
                 GameController.Instance.CurrentLevel.Speed = 2.2f;
@@ -21,14 +28,20 @@ public class SlowSpeed : MonoBehaviour
     }
     public void SetSlowSpeed()
     {
+        if (isInSlow) return;
         if (isSlow)
         {
             GameController.Instance.CurrentLevel.Speed = speedSlow;
         }
         else
         {
-            GameController.Instance.CurrentLevel.Speed = 3f;
+            GameController.Instance.CurrentLevel.Speed = speedNormal;
         }
         isInSlow = true;
+        if (isHide)
+        {
+            transform.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        
     }
 }

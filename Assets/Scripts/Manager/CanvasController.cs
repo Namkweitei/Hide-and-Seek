@@ -19,7 +19,9 @@ public class CanvasController : Singleton<CanvasController>
     [SerializeField] GameObject panelLoose;
     [SerializeField] GameObject panelNext;
     [SerializeField] TextMeshProUGUI textScore;
+    [SerializeField] int sceneLoad;
 
+    [SerializeField] bool isAilient;
     public int Coin 
     { 
         get => PlayerPrefs.GetInt("Coin",0); 
@@ -63,11 +65,11 @@ public class CanvasController : Singleton<CanvasController>
                 panelNext.SetActive(false);
             });
         }
-            
-        //buttonNext.onClick.AddListener(() =>
-        //{
-        //    SceneManager.LoadScene(0);
-        //});
+
+        buttonNext.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(sceneLoad == 0 ? 1 : 0);
+        });
         textScore.text = Coin.ToString();
     }
 
@@ -89,7 +91,15 @@ public class CanvasController : Singleton<CanvasController>
     }
     public void WinGame()
     {
-        StartCoroutine(WinCatch());
+        if (isAilient)
+        {
+            GameController.Instance.CurrentLevel.GetComponent<Animator>().enabled = true;
+            GameController.Instance.CurrentLevel.GetComponent<Animator>().Play("Tenlua");
+        }
+        else
+        {
+            StartCoroutine(WinCatch());
+        }
     }
     public void LooseGame()
     {
@@ -103,33 +113,38 @@ public class CanvasController : Singleton<CanvasController>
         yield return new WaitForSeconds(1f);
         panelLoose.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
         {
+
             GameController.Instance.InitStart();
             buttonStart.gameObject.SetActive(true);
             panelLoose.SetActive(false);
+
+
         });
         
     }
     IEnumerator WinCatch()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
         panelGame.SetActive(false);
         panelWin.SetActive(true);
         yield return new WaitForSeconds(2f);
         if(panelNext != null)
         {
-            panelWin.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
-            {
-                panelNext.SetActive(true);
-                
-            });
+            panelNext.SetActive(true);
         }
         else
         {
             panelWin.GetComponent<CanvasGroup>().DOFade(0, 1f).OnComplete(() =>
             {
-                GameController.Instance.InitStart();
-                buttonStart.gameObject.SetActive(true);
-                panelWin.SetActive(false);
+                if(sceneLoad == 0)
+                {
+                    SceneManager.LoadScene(1);
+                }
+                else
+                {
+                    SceneManager.LoadScene(0);
+                }
+                
             });
         }
         

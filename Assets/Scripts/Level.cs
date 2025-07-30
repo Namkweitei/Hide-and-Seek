@@ -2,6 +2,7 @@ using Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Level : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Level : MonoBehaviour
     [SerializeField] Transform startPoint;
     [SerializeField] Transform endPoint;
 
+    [SerializeField] Animator luaAnim;
     public float Speed { get => speed; set => speed = value; }
 
     // Start is called before the first frame update
@@ -25,9 +27,22 @@ public class Level : MonoBehaviour
         //{
         //    gameObject.SetActive(false);
         //}
+    }
+    private void FixedUpdate()
+    {
         float distanceStartToEnd = Vector3.Distance(startPoint.position, endPoint.position);
         float distance = Vector3.Distance(GameController.Instance.Player.transform.position, endPoint.position);
         CanvasController.Instance.SetSlider(1 - distance / distanceStartToEnd);
+        
     }
-
+    public void SetTenLua()
+    {
+        GameController.Instance.Player.gameObject.SetActive(false);
+        luaAnim.gameObject.SetActive(true);
+        luaAnim.Play("Lua");
+    }
+    public void SetLoad()
+    {
+        SceneManager.LoadScene(1);
+    }
 }

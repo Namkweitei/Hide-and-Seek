@@ -18,6 +18,7 @@ namespace Manager
         [SerializeField] Cat cat;
         [SerializeField] List<Level> levelList;
         [SerializeField] Level currentLevel;
+        [SerializeField] Nai nai;
         public bool IsPlay { get => isPlay; set => isPlay = value; }
         public Player Player { get => player; set => player = value; }
         public Cat Cat { get => cat; set => cat = value; }
@@ -49,6 +50,10 @@ namespace Manager
             currentLevel.transform.position = new Vector3(0, -2.8f, 0);
             cat.ChangeAnim("start1");
             player.ChangeAnim("idle");
+            if(nai != null)
+            {
+                nai.ChangeAnim("idle");
+            }
         }
         private void Update()
         {

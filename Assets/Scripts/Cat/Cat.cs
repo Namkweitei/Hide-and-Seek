@@ -30,6 +30,7 @@ public class Cat : MonoBehaviour
     {
         fieldOfViewLeft.SetOnHitObject(OnFieldOfViewHit);
         fieldOfViewRight.SetOnHitObject(OnFieldOfViewHit);
+        Reset();
     }
 
     private void OnFieldOfViewHit(Collider2D colliderHit)

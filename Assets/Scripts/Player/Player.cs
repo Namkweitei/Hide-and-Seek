@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Manager;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,9 +8,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField] Animator anim;
     [SerializeField] private string animName = "idle";
+    public Camera mainCamera;
     private bool isHoldingMouse = false;
     bool isStart;
-
+    bool isZoom = false;
     public bool IsStart { get => isStart; set => isStart = value; }
 
     // Start is called before the first frame update
@@ -34,7 +36,15 @@ public class Player : MonoBehaviour
             GameController.Instance.IsPlay = true;
             ChangeAnim("run");
         }
-
+        //if (isZoom)
+        //{
+        //    mainCamera.orthographicSize -= Time.deltaTime;
+        //    if (mainCamera.orthographicSize <= 2.4f)
+        //    {
+        //        mainCamera.orthographicSize = 2.4f;
+        //        isZoom = false;
+        //    }
+        //}
     }
 
     //private void OnCollisionEnter2D(Collision2D collision)
@@ -49,6 +59,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Home"))
         {
             GameController.Instance.WinGame();
+            
             //ChangeAnim("idle");
         }
         if(collision.gameObject.CompareTag("Coin"))
@@ -71,5 +82,13 @@ public class Player : MonoBehaviour
             anim.SetTrigger(this.animName);
 
         }
+    }
+    public void SetZoom()
+    {
+        isZoom = true;
+        mainCamera.DOOrthoSize(2.4f, 1f).SetEase(Ease.InOutCubic).OnComplete(() =>
+        {
+            isZoom = false;
+        });
     }
 }
